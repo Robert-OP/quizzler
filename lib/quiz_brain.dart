@@ -34,17 +34,25 @@ class QuizBrain {
         true),
   ];
 
-  void nextQuestion() {
-    if (_questionNumber < _questionBank.length - 1) {
-      _questionNumber++;
-    }
-  }
-
   String getQuestionText() {
     return _questionBank[_questionNumber].questionText;
   }
 
   bool getQuestionAnswer() {
     return _questionBank[_questionNumber].questionAnswer;
+  }
+
+  void nextQuestion() {
+    if (_questionNumber < _questionBank.length - 1) {
+      _questionNumber++;
+    }
+  }
+
+  bool isFinished() {
+    return _questionNumber == _questionBank.length - 1;
+  }
+
+  void resetQuiz() {
+    _questionNumber = 0;
   }
 }

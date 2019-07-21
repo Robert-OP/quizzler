@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain();
@@ -29,6 +30,43 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scoreKeeper = [];
+  checkAnswer(bool userAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+
+    setState(() {
+      if (quizBrain.isFinished()) {
+        Alert(
+          context: context,
+          title: 'Quiz Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
+
+        quizBrain.resetQuiz();
+
+        scoreKeeper = [];
+      } else {
+        if (userAnswer == correctAnswer) {
+          print('right');
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+          quizBrain.nextQuestion();
+        } else {
+          print('wrong');
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+          quizBrain.nextQuestion();
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,22 +105,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                bool correctAnswer = quizBrain.getQuestionAnswer();
-
-                if (correctAnswer == true) {
-                  print('nice');
-                } else {
-                  print('bad');
-                }
-                setState(() {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  );
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -101,22 +124,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                bool correctAnswer = quizBrain.getQuestionAnswer();
-
-                if (correctAnswer == false) {
-                  print('nice');
-                } else {
-                  print('bad');
-                }
-                setState(() {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  );
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
